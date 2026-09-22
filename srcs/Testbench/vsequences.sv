@@ -29,7 +29,7 @@ class dummy_vsequence extends vseq;
     
     $display("\n===============================================      Dummy Sequence    ========================================================== \n");
     repeat(5) begin
-      s1.start(vseqr.w_sqr);  // RUNS ONCE
+      s1.start(vseqr.w_sqr);
     end
     $display("\n ==============================================  END Of Dummy Sequence ========================================================== \n");
   endtask
@@ -56,9 +56,9 @@ class WD_WA_R_vsequence extends vseq;
     
     $display("\n============================== Write Data First and Write Address next and the Read Sequence ====================================== \n");
     repeat(`txns) begin
-      s1.start(vseqr.w_sqr);  // RUNS ONCE
+      s1.start(vseqr.w_sqr);  
       s2.past_addr = s1.past_addr;
-      s2.start(vseqr.r_sqr); // RUNS ONCE
+      s2.start(vseqr.r_sqr); 
     end
     $display("\n ==============================================  END Of WD WA R Sequence ========================================================== \n");
   endtask
@@ -85,9 +85,9 @@ class WA_WD_R_vsequence extends vseq;
     
     $display("\n ============================== Write Address First and Write Data next and the Read Sequence ====================================== \n");
     repeat(`txns) begin
-      s1.start(vseqr.w_sqr);  // RUNS ONCE
+      s1.start(vseqr.w_sqr);  
       s2.past_addr = s1.past_addr;
-      s2.start(vseqr.r_sqr); // RUNS ONCE
+      s2.start(vseqr.r_sqr); 
     end
     $display("\n ==============================================  END Of WA WD R Sequence =========================================================== \n");
   endtask
@@ -114,8 +114,8 @@ class WA_WD_R_prot_vsequence extends vseq;
     
     $display("\n ============================== Write Address First and Write Data next and the Read Sequence with prot ====================================== \n");
     repeat(`txns) begin
-      s1.start(vseqr.w_sqr);  // RUNS ONCE
-      s2.start(vseqr.r_sqr); // RUNS ONCE
+      s1.start(vseqr.w_sqr);
+      s2.start(vseqr.r_sqr); 
     end
     $display("\n ==============================================  END Of WA WD R prot Sequence =========================================================== \n");
   endtask
@@ -167,8 +167,8 @@ class WA_WD_parallel_R_vsequence extends vseq;
     $display("\n============================== Write Address and Write Data sent at same time and the Read Sequence ====================================== \n");
     
     repeat(`txns) fork
-      s1.start(vseqr.w_sqr);  // RUNS ONCE
-      s2.start(vseqr.r_sqr); // RUNS ONCE
+      s1.start(vseqr.w_sqr);  
+      s2.start(vseqr.r_sqr); 
     join
     
     $display("\n ==============================================  END Of WAD R Sequence =========================================================== \n");
@@ -197,8 +197,8 @@ class WA_3_cycle_later_WD_R_vsequence extends vseq;
     $display("\n============================== Write Address and Write Data sent after 3 cycles and the Read Sequence ====================================== \n");
     
     repeat(`txns) fork
-      s1.start(vseqr.w_sqr);  // RUNS ONCE
-      s2.start(vseqr.r_sqr); // RUNS ONCE
+      s1.start(vseqr.w_sqr);  
+      s2.start(vseqr.r_sqr);
     join
     
     $display("\n =============================  END Of Write Address and Write Data sent after 3 cycles and the Read Sequence ============================== \n");
@@ -227,8 +227,8 @@ class WD_3_cycle_later_WA_R_vsequence extends vseq;
     $display("\n============================== Write Data and Write Address sent after 3 cycles and the Read Sequence ====================================== \n");
     
     repeat(`txns) fork
-      s1.start(vseqr.w_sqr);  // RUNS ONCE
-      s2.start(vseqr.r_sqr); // RUNS ONCE
+      s1.start(vseqr.w_sqr);
+      s2.start(vseqr.r_sqr); 
     join
     
     $display("\n =============================  END Of Write Data and Write Address sent after 3 cycles and the Read Sequence ============================== \n");
@@ -252,12 +252,12 @@ class WAD_non_parallel_R_vsequence extends vseq;
     super.body();
     
     s1 = WAD_sequence :: type_id :: create("s1");
-    s2 = R_Sequence     :: type_id :: create("s2");
+    s2 = R_Sequence   :: type_id :: create("s2");
     
     $display("\n============================== Write Address and Write Data sent at same time and the Read Sequence ====================================== \n");
     
     repeat(`txns) begin
-      s1.start(vseqr.w_sqr);  // RUNS ONCE
+      s1.start(vseqr.w_sqr);
     end
     
     repeat(`txns) begin
@@ -285,7 +285,7 @@ class WAD_parallel_R_vsequence extends vseq;
     super.body();
     
     s1 = WAD_sequence :: type_id :: create("s1");
-    s2 = R_Sequence     :: type_id :: create("s2");
+    s2 = R_Sequence   :: type_id :: create("s2");
     
     $display("\n============================== Write Address and Write Data sent at same time and the Read Sequence ====================================== \n");
     
@@ -313,7 +313,7 @@ class Read_only_vsequence extends vseq;
   task body;
     super.body();
  
-    s2 = R_Sequence     :: type_id :: create("s2");
+    s2 = R_Sequence :: type_id :: create("s2");
     
     $display("\n============================== Read only Sequence ====================================== \n");
     
@@ -346,9 +346,9 @@ class WD_WA_wstrb_R_vsequence extends vseq;
     
     $display("\n============================== Write Data with WSTRB First and Write Address next and the Read Sequence ====================================== \n");
     repeat(`txns) begin
-      s1.start(vseqr.w_sqr);  // RUNS ONCE
+      s1.start(vseqr.w_sqr);
       s2.past_addr = s1.past_addr;
-      s2.start(vseqr.r_sqr); // RUNS ONCE
+      s2.start(vseqr.r_sqr);
     end
     $display("\n ==============================================  END Of WD with WSTRB WA R Sequence ========================================================== \n");
   endtask
@@ -375,9 +375,9 @@ class WA_WD_R_wstrb_vsequence extends vseq;
     
     $display("\n ============================== Write Address First and Write Data with WSTRB next and the Read Sequence ====================================== \n");
     repeat(`txns) begin
-      s1.start(vseqr.w_sqr);  // RUNS ONCE
+      s1.start(vseqr.w_sqr);
       s2.past_addr = s1.past_addr;
-      s2.start(vseqr.r_sqr); // RUNS ONCE
+      s2.start(vseqr.r_sqr);
     end
     $display("\n ==============================================  END Of WA WD with WSTRB R Sequence =========================================================== \n");
   endtask
@@ -407,16 +407,16 @@ class WA_WD_R_wstrb_directed_vsequence extends vseq;
     s2.past_addr = 0;
     
     repeat(`txns) begin
-      s1.start(vseqr.w_sqr);  // RUNS ONCE
-      s2.start(vseqr.r_sqr); // RUNS ONCE
+      s1.start(vseqr.w_sqr);
+      s2.start(vseqr.r_sqr);
     end
     `uvm_info(get_type_name, "Addr = 'h14", UVM_MEDIUM)
     s1.past_addr = 20;
     s2.past_addr = 20;
     
     repeat(`txns) begin
-      s1.start(vseqr.w_sqr);  // RUNS ONCE
-      s2.start(vseqr.r_sqr); // RUNS ONCE
+      s1.start(vseqr.w_sqr);
+      s2.start(vseqr.r_sqr);
     end
     
     `uvm_info(get_type_name, "Addr = 'h3c", UVM_MEDIUM)
@@ -424,8 +424,8 @@ class WA_WD_R_wstrb_directed_vsequence extends vseq;
     s2.past_addr = 60;
     
     repeat(`txns) begin
-      s1.start(vseqr.w_sqr);  // RUNS ONCE
-      s2.start(vseqr.r_sqr); // RUNS ONCE
+      s1.start(vseqr.w_sqr);
+      s2.start(vseqr.r_sqr);
     end
     
     $display("\n ==============================================  END Of WA WD with WSTRB R Sequence =========================================================== \n");
@@ -454,8 +454,8 @@ class WAD_R_wstrb_vsequence extends vseq;
     $display("\n============================== Write Address and Write Data with WSTRB sent at same time and the Read Sequence ====================================== \n");
     
     repeat(`txns) fork
-      s1.start(vseqr.w_sqr);  // RUNS ONCE
-      s2.start(vseqr.r_sqr); // RUNS ONCE
+      s1.start(vseqr.w_sqr);
+      s2.start(vseqr.r_sqr); 
     join
     
     $display("\n ==============================================  END Of WAD with WSTRB R Sequence =========================================================== \n");
@@ -485,7 +485,7 @@ class R_WA_WD_vsequence extends vseq;
     
     repeat(`txns) begin
       s2.start(vseqr.r_sqr);
-      s1.start(vseqr.w_sqr);  // RUNS ONCE
+      s1.start(vseqr.w_sqr);
     end
     
     $display("\n ==============================================  END Of R WAD Sequence =========================================================== \n");
@@ -548,8 +548,8 @@ class WA_WD_R_drive_bready_and_rready_after_4_clk_cycle_vsequences extends vseq;
     $display("\n===================================================== Drive bready and rready after 4 clk cycle ================================================================= \n");
     
     repeat(`txns) begin
-      s1.start(vseqr.w_sqr);  // RUNS ONCE
-      s2.start(vseqr.r_sqr); // RUNS ONCE
+      s1.start(vseqr.w_sqr);
+      s2.start(vseqr.r_sqr);
     end
     
     $display("\n ================================================ END Of Drive bready and rready after 4 clk cycle ============================================================= \n");
@@ -578,8 +578,8 @@ class WA_WD_R_drive_bready_and_rready_always_high_vsequences extends vseq;
     $display("\n===================================================== Drive bready and rready always high ================================================================= \n");
     
     repeat(`txns) fork
-      s2.start(vseqr.w_sqr);  // RUNS ONCE
-      s1.start(vseqr.r_sqr); // RUNS ONCE
+      s2.start(vseqr.w_sqr);
+      s1.start(vseqr.r_sqr);
     join
     
     $display("\n ================================================ END Of Drive bready and rready always high ============================================================= \n");
@@ -608,8 +608,8 @@ class WD_WA_R_drive_bready_and_rready_always_high_vsequences extends vseq;
     $display("\n===================================================== Drive bready and rready always high ================================================================= \n");
     
     repeat(`txns) fork
-      s2.start(vseqr.w_sqr);  // RUNS ONCE
-      s1.start(vseqr.r_sqr); // RUNS ONCE
+      s2.start(vseqr.w_sqr);
+      s1.start(vseqr.r_sqr);
     join
     
     $display("\n ================================================ END Of Drive bready and rready always high ============================================================= \n");
@@ -638,8 +638,8 @@ class WA_WD_R_drive_without_waiting_for_ready_vsequences extends vseq;
     $display("\n============================== Write Address and Write Data and the Read Sequence driven without ready ====================================== \n");
     
     repeat(`txns) begin
-      s1.start(vseqr.w_sqr);  // RUNS ONCE
-      s2.start(vseqr.r_sqr); // RUNS ONCE
+      s1.start(vseqr.w_sqr);
+      s2.start(vseqr.r_sqr); 
     end
     
     $display("\n ==============================================  END Of Write Address and Write Data and the Read Sequence driven without ready =========================================================== \n");
@@ -664,8 +664,8 @@ class WA_WD_R_drive_without_waiting_for_ready_parallel_vsequences extends vseq;
     $display("\n====================================== Write Address and Write Data and the Read Sequence driven without ready parallely ====================================== \n");
     
     repeat(`txns) fork
-      s1.start(vseqr.w_sqr);  // RUNS ONCE
-      s2.start(vseqr.r_sqr); // RUNS ONCE
+      s1.start(vseqr.w_sqr);
+      s2.start(vseqr.r_sqr); 
     join
     
     $display("\n ==================================== END Of Write Address and Write Data and the Read Sequence driven without ready parallely =================================================== \n");
@@ -692,8 +692,8 @@ class WA_WD_R_OF_bound_address_unaligned_vsequences extends vseq;
     
     $display("\n ============================== Write Address First and Write Data next OF_bound_address_unaligned_sequences ====================================== \n");
     repeat(`txns) fork
-      s1.start(vseqr.w_sqr);  // RUNS ONCE
-      s2.start(vseqr.r_sqr); // RUNS ONCE
+      s1.start(vseqr.w_sqr);
+      s2.start(vseqr.r_sqr);
     join
     $display("\n =========================== END Of Write Address First and Write Data next OF_bound_address_unaligned_sequences ================================== \n");
   
@@ -721,8 +721,8 @@ class WD_WA_R_OF_bound_address_unaligned_vsequences extends vseq;
     
     $display("\n ============================== Write Data First and Write Address next OF_bound_address_unaligned_sequences ====================================== \n");
     repeat(`txns) fork
-      s1.start(vseqr.w_sqr);  // RUNS ONCE
-      s2.start(vseqr.r_sqr); // RUNS ONCE
+      s1.start(vseqr.w_sqr);
+      s2.start(vseqr.r_sqr);
     join
     $display("\n =========================== END Of Write Address First and Write Data next OF_bound_address_unaligned_sequences ================================== \n");
   
@@ -751,8 +751,8 @@ class WDA_R_OF_bound_address_unaligned_vsequences extends vseq;
     
     $display("\n ============================== Write Data and Write Address Out of bound address unaligned sequences ====================================== \n");
     repeat(`txns) fork
-      s1.start(vseqr.w_sqr);  // RUNS ONCE
-      s2.start(vseqr.r_sqr); // RUNS ONCE
+      s1.start(vseqr.w_sqr);
+      s2.start(vseqr.r_sqr); 
     join
     $display("\n =========================== END Of Write Data and Write Address Out of bound address unaligned sequences ================================== \n");
     
@@ -780,8 +780,8 @@ class WA_WD_R_address_unaligned_vsequences extends vseq;
     
     $display("\n ============================== Write Address First and Write Data next address unaligned sequences ====================================== \n");
     repeat(`txns) fork
-      s1.start(vseqr.w_sqr);  // RUNS ONCE
-      s2.start(vseqr.r_sqr); // RUNS ONCE
+      s1.start(vseqr.w_sqr);  
+      s2.start(vseqr.r_sqr);
     join
     $display("\n ==========================  END Of Write Address First and Write Data next address unaligned sequences ================================== \n");
   
@@ -809,8 +809,8 @@ class WD_WA_R_address_unaligned_vsequences extends vseq;
     
     $display("\n ============================== Write Data First and Write Address next address unaligned sequences ====================================== \n");
     repeat(`txns) fork
-      s1.start(vseqr.w_sqr);  // RUNS ONCE
-      s2.start(vseqr.r_sqr); // RUNS ONCE
+      s1.start(vseqr.w_sqr);  
+      s2.start(vseqr.r_sqr); 
     join
     $display("\n ==========================  END Of Write Data First and Write Address next address unaligned sequences ================================== \n");
     
@@ -838,8 +838,8 @@ class WDA_R_address_unaligned_vsequences extends vseq;
     
     $display("\n ============================== Write Data and Write Address with address unaligned sequences ====================================== \n");
     repeat(`txns) fork
-      s1.start(vseqr.w_sqr);  // RUNS ONCE
-      s2.start(vseqr.r_sqr); // RUNS ONCE
+      s1.start(vseqr.w_sqr);  
+      s2.start(vseqr.r_sqr); 
     join
     $display("\n ==========================  END Of Write Data and Write Address with address unaligned sequences ================================== \n");
     
@@ -867,8 +867,8 @@ class WA_WD_OF_bound_address_vsequences extends vseq;
     
     $display("\n ============================== Write Address First and Write Data next Out of bound address sequences ====================================== \n");
     repeat(`txns) fork
-      s1.start(vseqr.w_sqr);  // RUNS ONCE
-      s2.start(vseqr.r_sqr); // RUNS ONCE
+      s1.start(vseqr.w_sqr);  
+      s2.start(vseqr.r_sqr); 
     join
     $display("\n ==========================  END Of Write Address First and Write Data next Out of bound address sequences ================================== \n");
   
@@ -945,8 +945,8 @@ class WD_WA_OF_bound_address_vsequences extends vseq;
     
     $display("\n ============================== Write Data First and Write Address next Out of bound address sequences ====================================== \n");
     repeat(`txns) fork
-      s1.start(vseqr.w_sqr);  // RUNS ONCE
-      s2.start(vseqr.r_sqr); // RUNS ONCE
+      s1.start(vseqr.w_sqr);  
+      s2.start(vseqr.r_sqr);
     join
     $display("\n ==========================  END Of Write Data First and Write Address next Out of bound address sequences ================================== \n");
   endtask
@@ -973,8 +973,8 @@ class WDA_OF_bound_address_vsequences extends vseq;
     
     $display("\n ============================== Write Data and Write Address Out of bound address sequences ====================================== \n");
     repeat(`txns) fork
-      s1.start(vseqr.w_sqr);  // RUNS ONCE
-      s2.start(vseqr.r_sqr); // RUNS ONCE
+      s1.start(vseqr.w_sqr);  
+      s2.start(vseqr.r_sqr); 
     join
     $display("\n ==========================  END Of Write Data and Write Address Out of bound address sequences ================================== \n");
     
@@ -1000,7 +1000,7 @@ class WD_WA_in_read_only_vsequences extends vseq;
     
     $display("\n ============================== Write Data first and Write Address next in read only sequences ====================================== \n");
     repeat(`txns) begin
-      s1.start(vseqr.w_sqr);  // RUNS ONCE
+      s1.start(vseqr.w_sqr);  
     end
     $display("\n ==========================  END Of Write Data first and Write Address next in read only sequences ================================== \n");
     
@@ -1026,7 +1026,7 @@ class WA_WD_in_read_only_vsequences extends vseq;
     
     $display("\n ============================== Write Address first and Write Data next in read only sequences ====================================== \n");
     repeat(`txns) begin
-      s1.start(vseqr.w_sqr);  // RUNS ONCE
+      s1.start(vseqr.w_sqr);  
     end
     $display("\n ==========================  END Of Write Address first and Write Data next in read only sequences ================================== \n");
   
