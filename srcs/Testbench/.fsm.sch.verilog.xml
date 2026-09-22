@@ -1,0 +1,8 @@
+<Command name="schRTLInfo"  delimiter="."  >
+<RTLBlock >
+<RTLInfo   name="wr_state_0"  type="2"  fileName="design.v"  >
+    <Seg beginLine="108"  endLine="121"  />
+  </RTLInfo>
+<Instance name="tb.dut"  />
+</RTLBlock>
+</Command>

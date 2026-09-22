@@ -1,104 +1,89 @@
-interface alu_assertion(
-  input bit clk,
-  input bit [`dw - 1 : 0] opb, 
-  input bit [`dw * 2 - 1 : 0]res,
-  input bit [`cw -1 : 0] cmd, 
-  input bit [1:0] inp_valid,
-  input bit g, l, e, err, oflow, cout, ce, mode, reset 
+`include "Testbench/defines.svh"
+
+interface axi_assertion(
+  input bit clk, rst,
+  input bit [`aw - 1 : 0] awaddr, araddr,
+  input bit [`dw - 1 : 0] wdata, rdata,
+  input bit [`dw/8 - 1 : 0] wstrb,
+  input bit [2:0] arprot, awprot,
+  input bit [1:0] bresp, rresp,
+  input bit awvalid, wvalid, rready, arvalid,
+  input bit awready, wready, arready, bvalid, rvalid, bready
 );
 
-  property ch_rst;
-    @(posedge reset) 
-    $rose(reset) |-> (res == 0) && (g == 0) && (l == 0) && (e == 0) && (err == 0) && (oflow == 0) && (cout == 0);
-  endproperty
-
-  property ch_inp_valid;
-    int exp = 0;
-    @(posedge clk) disable iff (reset)
-    ((inp_valid == 2'b01 || inp_valid == 2'b10), exp = (inp_valid == 2'b01) ? 2'b10 : 2'b01) |-> first_match(##[1:16] (exp == inp_valid)) or (exp != inp_valid)[*16] ##1 $rose(err) ;
-  endproperty
-
-  property ch_ROL;
-    @(posedge clk) disable iff (reset)
-    ((mode == 0) && (ce == 1)) && ((cmd == 12) && (opb[`dw - 1 : 4] != 0)) |=> $rose(err);
+  property awready_ch;
+    @(posedge clk) disable iff(!rst)
+    $rose(awvalid) |-> first_match(##[0:$] awready) ##1 !awready; 
   endproperty
   
-
-  property ch_ROR;
-    @(posedge clk)disable iff (reset)
-    (mode == 0) && (ce == 1) && (cmd == 13) && (opb[`dw - 1 : 4] != 0) |=> $rose(err);
-  endproperty
-
-  property ch_inc_dec_a;
-    @(posedge clk) disable iff (reset)
-    (mode == 1) && (ce == 1) && (cmd == 4 || cmd == 5) && (inp_valid[0] != 1) |=> $rose(err);
-  endproperty
-
-  property ch_inc_dec_b;
-    @(posedge clk) disable iff (reset)
-    (mode == 1) && (ce == 1) && (cmd == 6 || cmd == 7) && (inp_valid[1] != 1) |=> $rose(err);
-  endproperty
-
-  property ch_ce;
-    @(posedge clk) disable iff (reset)
-    $fell(ce) |=> $stable(res) && $stable(cout) && $stable(oflow) && $stable(g) && $stable(l) && $stable(e) && $stable(err);
+  property wready_ch;
+    @(posedge clk) disable iff(!rst)
+    $rose(wvalid) |-> first_match(##[0:$] wready) ##1 !wready;
   endproperty
   
-  property ch_arith_invalid_cmd;
-    @(posedge clk) disable iff (reset)
-    mode == 1 && cmd >10 && ce == 1 |=> $rose(err);
+  property bvalid_ch;
+    @(posedge clk) disable iff(!rst)
+    $rose(awready) ##0 first_match(##[0:$] wready) |=> first_match(##[0:$] bvalid);
   endproperty
   
-  property ch_logic_invalid_cmd;
-    @(posedge clk) disable iff (reset)
-    mode == 0 && cmd >13 && ce == 1 |=> $rose(err);
+  property arready_ch;
+    @(posedge clk) disable iff(!rst)
+    $rose(arvalid) |-> first_match(##[0:$] arready); 
   endproperty
   
+  property rvalid_ch;
+    @(posedge clk) disable iff(!rst)
+    $rose(arready) |-> first_match(##[0:$] $rose(rvalid));
+  endproperty
   
-  assert property(ch_rst)
-    $info("ch_rst ASSERTION PASSED SUCCESSFULLY");
+  property bvalid_stbl_ch;
+    int abresp= 0;
+    int abvalid = 0;
+    @(posedge clk) disable iff(!rst)
+    ($rose(bvalid), abresp = bresp, abvalid= bvalid) |-> ((bresp == abresp) && (bvalid == abvalid)) until_with bready;
+  endproperty
+  
+  property rvalid_stbl_ch;
+    int a_rvalid = 0;
+    int arresp = 0;
+    int ardata = 0;
+    @(posedge clk) disable iff(!rst)
+    ($rose(rvalid), arresp = rresp, ardata = rdata, a_rvalid = rvalid) |-> (((rresp == arresp) && (rdata == ardata)) && (rvalid == a_rvalid)) until_with $rose(rready);
+  endproperty
+  
+  assert property(awready_ch)
+    $info("Assertion awready_ch Passed Successfully");
   else
-    $error("ch_rst Assertion failed");
+    $info("Assertion awready_ch Failed");
     
-  assert property(ch_inp_valid)
-    $info("ch_inp_valid ASSERTION PASSED SUCCESSFULLY");
+  assert property(wready_ch)
+    $info("Assertion wready_ch Passed Successfully");
   else
-    $error("ch_inp_valid Assertion failed");
-  
-  
-  assert property(ch_ROL)
-    $info("ch_ROL ASSERTION PASSED SUCCESSFULLY");
-  else
-    $error("ch_ROL Assertion failed");
+    $info("Assertion wready_ch Failed");
     
-  assert property(ch_ROR)
-    $info("ch_ROR ASSERTION PASSED SUCCESSFULLY");
+  assert property(bvalid_ch)
+    $info("Assertion bvalid_ch Passed Successfully");
   else
-    $error("ch_ROR Assertion failed");
+    $info("Assertion bvalid_ch Failed");
     
-  assert property(ch_inc_dec_a)
-    $info("ch_in_dec_a ASSERTION PASSED SUCCESSFULLY");
+  assert property(arready_ch)
+    $info("Assertion arready_ch Passed Successfully");
   else
-    $error("ch_in_dec_a Assertion failed");
+    $info("Assertion arready_ch Failed");
     
-  assert property(ch_inc_dec_b)
-    $info("ch_inc_dec_b ASSERTION PASSED SUCCESSFULLY");
+  assert property(rvalid_ch)
+    $info("Assertion rvalid_ch Passed Successfully");
   else
-    $error("ch_in_dec_b Assertion failed");
+    $info("Assertion rvalid_ch Failed");
     
-  assert property(ch_ce)
-    $info("CE ASSERTION PASSED SUCCESSFULLY");
+  assert property(bvalid_stbl_ch)
+    $info("Assertion bvalid_stbl_ch Passed Successfully");
   else
-    $error("CE Assertion failed");
+    $info("Assertion bvalid_stbl_ch Failed");
     
-  assert property (ch_arith_invalid_cmd)
-    $info("ch_arith_invalid_cmd ASSERTION PASSED SUCCESSFULLY");
+  assert property(rvalid_stbl_ch)
+    $info("Assertion rvalid_stbl_ch Passed Successfully");
   else
-    $error("ch_arith_invalid_cmd Assertion failed");
+    $info("Assertion rvalid_stbl_ch Failed");
     
-  assert property (ch_logic_invalid_cmd)
-    $info("ch_logic_invalid_cmd ASSERTION PASSED SUCCESSFULLY");
-  else
-    $error("ch_logic_invalid_cmd Assertion failed");
-  
 endinterface

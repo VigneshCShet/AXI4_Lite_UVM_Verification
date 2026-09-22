@@ -186,7 +186,6 @@ always @(posedge ACLK or negedge ARESETn) begin
             end
         endcase
     end
-    $display("%p", reg_file);
 end
 
 

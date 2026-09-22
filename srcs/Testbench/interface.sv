@@ -1,4 +1,4 @@
-  `include "defines.svh"
+`include "Testbench/defines.svh"
 interface axi_if(input bit clk, rst);
 //write address channel
   logic [`aw - 1 : 0] awaddr;
@@ -8,7 +8,7 @@ interface axi_if(input bit clk, rst);
 
 //write data channel
   logic [`dw -1 : 0] wdata;
-  logic [`dw/8 - 1 : 0] wstrb;
+  logic [(`dw/8) - 1 : 0] wstrb;
   logic wvalid;
   logic wready; //output
 
@@ -46,7 +46,8 @@ interface axi_if(input bit clk, rst);
   endclocking
   
   modport drmod(clocking dr_cb);
-  modport mimod(clocking mi_cb);
-  modport momod(clocking mo_cb);
+  modport mimod(clocking mi_cb, input rst);
+  modport momod(clocking mo_cb, input rst, bresp, rdata, rresp);
   
 endinterface
+

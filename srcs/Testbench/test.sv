@@ -1,202 +1,375 @@
 class base_test extends uvm_test;
   `uvm_component_utils(base_test)
+  axi_environment env;
   
-  alu_env en;
-  
-  function new(string name = "base_test", uvm_component parent = null);
+  function new(string name, uvm_component parent);
     super.new(name, parent);
   endfunction
   
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    en = alu_env :: type_id :: create("en", this);
+    env = axi_environment :: type_id :: create("env", this);
   endfunction
   
   function void end_of_elaboration_phase(uvm_phase phase);
     super.end_of_elaboration_phase(phase);
     uvm_top.print_topology();
   endfunction
+  
 endclass
 
-
-
-class regression_test extends base_test;
-  `uvm_component_utils(regression_test)
+class write_read_test extends base_test;
+  `uvm_component_utils(write_read_test)
   
-  alu_sequence_arith s1;
-  alu_sequence_logic s2;
-  alu_sequence_inp_valid_01 s3;
-  alu_sequence_inp_valid_error_01 s4;
-  alu_sequence_inp_valid_10 s5;
-  alu_sequence_inp_valid_error_10 s6;
-  alu_sequence_inp_valid_01_arith s7;
-  alu_sequence_inp_valid_error_10_arith s10;
-  alu_sequence_inp_valid_10_arith s9;
-  alu_sequence_inp_valid_error_01_arith s8;
-  sequence_inp_valid_error_00 s11;
-  sequence_ce s12;
-  sequence_error s13;
-  sequence_inp_valid_error_1_op s14;
-  sanity_sequence_arith s15;
-  sanity_sequence_logic s16;
-  corner_sequence s17;
+  dummy_vsequence vs;
+  WD_WA_R_vsequence v1;
+  WA_WD_R_vsequence v2;
+  WA_WD_parallel_R_vsequence v3;
+  WAD_non_parallel_R_vsequence v4;
+  WAD_parallel_R_vsequence v5;
+  WA_3_cycle_later_WD_R_vsequence v6;
+  WD_3_cycle_later_WA_R_vsequence v7;
+  WA_WD_R_prot_vsequence v8;
   
-  function new(string name = "regression_test", uvm_component parent = null);
+  function new(string name, uvm_component parent);
     super.new(name, parent);
   endfunction
   
-  function void build_phase(uvm_phase phase);
-    super.build_phase(phase);    
-  endfunction
-
   task run_phase(uvm_phase phase);
   
-    super.run_phase(phase);
+    vs = dummy_vsequence                 :: type_id :: create("vs");
+    v1 = WD_WA_R_vsequence               :: type_id :: create("v1");
+    v2 = WA_WD_R_vsequence               :: type_id :: create("v2");
+    v3 = WA_WD_parallel_R_vsequence      :: type_id :: create("v3");
+    v4 = WAD_non_parallel_R_vsequence    :: type_id :: create("v4");
+    v5 = WAD_parallel_R_vsequence        :: type_id :: create("v5");
+    v6 = WA_3_cycle_later_WD_R_vsequence :: type_id :: create("v6");
+    v7 = WD_3_cycle_later_WA_R_vsequence :: type_id :: create("v7");
+    v8 = WA_WD_R_prot_vsequence          :: type_id :: create("v8");
     
-    s1  = alu_sequence_arith                     :: type_id :: create("s1");
-    s2  = alu_sequence_logic                     :: type_id :: create("s2");
-    s3  = alu_sequence_inp_valid_01              :: type_id :: create("s3");
-    s4  = alu_sequence_inp_valid_error_01        :: type_id :: create("s4");
-    s5  = alu_sequence_inp_valid_10              :: type_id :: create("s5");
-    s6  = alu_sequence_inp_valid_error_10        :: type_id :: create("s6");
-    s7  = alu_sequence_inp_valid_01_arith        :: type_id :: create("s7");
-    s8  = alu_sequence_inp_valid_error_01_arith  :: type_id :: create("s8");
-    s9  = alu_sequence_inp_valid_10_arith        :: type_id :: create("s9");
-    s10 = alu_sequence_inp_valid_error_10_arith  :: type_id :: create("s10");
-    s11 = sequence_inp_valid_error_00            :: type_id :: create("s11");
-    s12 = sequence_ce                            :: type_id :: create("s12");
-    s13 = sequence_error                         :: type_id :: create("s13");
-    s14 = sequence_inp_valid_error_1_op          :: type_id :: create("s14");
-    s15 = sanity_sequence_arith                  :: type_id :: create("s15");
-    s16 = sanity_sequence_logic                  :: type_id :: create("s16");
-    s17 = corner_sequence                        :: type_id :: create("s17");
-
     phase.raise_objection(this);
-    
-    
-    s1.start(en.agi.seqr);
-    s2.start(en.agi.seqr);
-    s3.start(en.agi.seqr);
-    s4.start(en.agi.seqr);
-    s5.start(en.agi.seqr);
-    s6.start(en.agi.seqr);
-    s7.start(en.agi.seqr);
-    s8.start(en.agi.seqr);
-    s9.start(en.agi.seqr);
-    s10.start(en.agi.seqr);
-    s11.start(en.agi.seqr);
-    s12.start(en.agi.seqr);
-    s13.start(en.agi.seqr);
-    s14.start(en.agi.seqr);
-    s15.start(en.agi.seqr);
-    s16.start(en.agi.seqr);
-    s17.start(en.agi.seqr);
-    
-    `uvm_info(get_type_name(),"Dropping objection", UVM_NONE)
-    
+      
+      vs.start(env.vseqr);
+      v1.start(env.vseqr);
+      v2.start(env.vseqr);
+      v3.start(env.vseqr);
+      v4.start(env.vseqr);
+      v5.start(env.vseqr);
+      v6.start(env.vseqr);
+      v7.start(env.vseqr);
+      v8.start(env.vseqr);
+      #1000;
+      
     phase.drop_objection(this);
     
   endtask
   
-endclass 
+endclass
 
-
-
-class error_test extends base_test;
-  `uvm_component_utils(error_test)
+class read_write_test extends base_test;
+  `uvm_component_utils(read_write_test)
   
-  alu_sequence_inp_valid_error_01 s1;
-  alu_sequence_inp_valid_error_10 s2;
-  sequence_inp_valid_error_00 s3;
-  sequence_error s4;
-  sequence_inp_valid_error_1_op s5;
+  dummy_vsequence vs;
+  write_only_vsequence v1;
+  R_WA_WD_vsequence v2;
+  R_WA_WD_same_addr_vsequence v3;
+  Read_only_vsequence v4;
   
-  function new(string name = "error_test", uvm_component parent = null);
+  function new(string name, uvm_component parent);
     super.new(name, parent);
   endfunction
   
-  function void build_phase(uvm_phase phase);
-    super.build_phase(phase);
+  task run_phase(uvm_phase phase);
+  
+    vs = dummy_vsequence             :: type_id :: create("vs");
+    v1 = write_only_vsequence        :: type_id :: create("v1");
+    v2 = R_WA_WD_vsequence           :: type_id :: create("v2");
+    v3 = R_WA_WD_same_addr_vsequence :: type_id :: create("v3");
+    v4 = Read_only_vsequence         :: type_id :: create("v4");
+    
+    phase.raise_objection(this);
+      
+      vs.start(env.vseqr);
+      v1.start(env.vseqr);
+      v2.start(env.vseqr);
+      v3.start(env.vseqr);
+      v4.start(env.vseqr);
+      #1000;
+      
+    phase.drop_objection(this);
+    
+  endtask
+  
+endclass
+
+class write_strobe_test extends base_test;
+  `uvm_component_utils(write_strobe_test)
+  
+  dummy_vsequence vs;
+  WD_WA_wstrb_R_vsequence v1;
+  WA_WD_R_wstrb_vsequence v2;
+  WAD_R_wstrb_vsequence v3;
+  WA_WD_R_wstrb_directed_vsequence v4;
+  
+  function new(string name, uvm_component parent);
+    super.new(name, parent);
   endfunction
   
   task run_phase(uvm_phase phase);
-    super.run_phase(phase);
-    
-    s1 = alu_sequence_inp_valid_error_01 :: type_id :: create("s1");
-    s2 = alu_sequence_inp_valid_error_10 :: type_id :: create("s2");
-    s3 = sequence_inp_valid_error_00     :: type_id :: create("s3");
-    s4 = sequence_error                  :: type_id :: create("s4");
-    s5 = sequence_inp_valid_error_1_op   :: type_id :: create("s5");
+  
+    vs = dummy_vsequence                  :: type_id :: create("vs");
+    v1 = WD_WA_wstrb_R_vsequence          :: type_id :: create("v1");
+    v2 = WA_WD_R_wstrb_vsequence          :: type_id :: create("v2");
+    v3 = WAD_R_wstrb_vsequence            :: type_id :: create("v3");
+    v4 = WA_WD_R_wstrb_directed_vsequence :: type_id :: create("v4");
     
     phase.raise_objection(this);
-    
-    s1.start(en.agi.seqr);
-    s2.start(en.agi.seqr);
-    s3.start(en.agi.seqr);
-    s4.start(en.agi.seqr);
-    s5.start(en.agi.seqr);
-    
-    `uvm_info(get_type_name(),"Dropping objection", UVM_NONE)
-    
+      
+      vs.start(env.vseqr);
+      v1.start(env.vseqr);
+      v2.start(env.vseqr);
+      v3.start(env.vseqr);
+      v4.start(env.vseqr);
+      #1000;
+      
     phase.drop_objection(this);
+    
+  endtask
+  
+endclass
+
+class unaligned_address_test extends base_test;
+  `uvm_component_utils(unaligned_address_test)
+  
+  dummy_vsequence vs;
+  WA_WD_R_address_unaligned_vsequences v1;
+  WD_WA_R_address_unaligned_vsequences v2;
+  WDA_R_address_unaligned_vsequences v3;
+
+  
+  function new(string name, uvm_component parent);
+    super.new(name, parent);
+  endfunction
+  
+  task run_phase(uvm_phase phase);
+  
+    vs  = dummy_vsequence                      :: type_id :: create("vs");
+    v1  = WA_WD_R_address_unaligned_vsequences :: type_id :: create("v1");
+    v2  = WD_WA_R_address_unaligned_vsequences :: type_id :: create("v2");
+    v3  = WDA_R_address_unaligned_vsequences   :: type_id :: create("v3");
+
+    
+    phase.raise_objection(this);
+      
+      vs.start(env.vseqr);
+      v1.start(env.vseqr);
+      v2.start(env.vseqr);
+      v3.start(env.vseqr);
+      #1000;
+      
+    phase.drop_objection(this);
+    
+  endtask
+  
+endclass
+
+class out_of_bound_address_test extends base_test;
+  `uvm_component_utils(out_of_bound_address_test)
+  
+  dummy_vsequence vs;
+  WA_WD_OF_bound_address_vsequences v1;
+  WD_WA_OF_bound_address_vsequences v2;
+  WDA_OF_bound_address_vsequences v3;
+  WA_WD_OF_bound_address_directed_vsequences v4;
+
+  
+  function new(string name, uvm_component parent);
+    super.new(name, parent);
+  endfunction
+  
+  task run_phase(uvm_phase phase);
+  
+    vs  = dummy_vsequence                            :: type_id :: create("vs");
+    v1  = WA_WD_OF_bound_address_vsequences          :: type_id :: create("v1");
+    v2  = WD_WA_OF_bound_address_vsequences          :: type_id :: create("v2");
+    v3  = WDA_OF_bound_address_vsequences            :: type_id :: create("v3");
+    v4  = WA_WD_OF_bound_address_directed_vsequences :: type_id :: create("v4");
+
+    
+    phase.raise_objection(this);
+      
+      vs.start(env.vseqr);
+      v1.start(env.vseqr);
+      v2.start(env.vseqr);
+      v3.start(env.vseqr);
+      v4.start(env.vseqr);
+      #1000;
+      
+    phase.drop_objection(this);
+    
+  endtask
+  
+endclass
+
+class out_of_bound_and_unaligned_address_test extends base_test;
+  `uvm_component_utils(out_of_bound_and_unaligned_address_test)
+  
+  dummy_vsequence vs;
+  WA_WD_R_OF_bound_address_unaligned_vsequences v1;
+  WD_WA_R_OF_bound_address_unaligned_vsequences v2;
+  WDA_R_OF_bound_address_unaligned_vsequences v3;
+
+  
+  function new(string name, uvm_component parent);
+    super.new(name, parent);
+  endfunction
+  
+  task run_phase(uvm_phase phase);
+  
+    vs  = dummy_vsequence                               :: type_id :: create("vs");
+    v1  = WA_WD_R_OF_bound_address_unaligned_vsequences :: type_id :: create("v1");
+    v2  = WD_WA_R_OF_bound_address_unaligned_vsequences :: type_id :: create("v2");
+    v3  = WDA_R_OF_bound_address_unaligned_vsequences   :: type_id :: create("v3");
+
+    
+    phase.raise_objection(this);
+      
+      vs.start(env.vseqr);
+      v1.start(env.vseqr);
+      v2.start(env.vseqr);
+      v3.start(env.vseqr);
+      #1000;
+      
+    phase.drop_objection(this);
+    
+  endtask
+  
+endclass
+
+class RO_WO_address_test extends base_test;
+  `uvm_component_utils(RO_WO_address_test)
+  
+  dummy_vsequence vs;
+  WD_WA_R_vsequence vw;
+  WD_WA_in_read_only_vsequences v1;
+  WA_WD_in_read_only_vsequences v2;
+  WDA_in_read_only_vsequences v3;
+  R_in_write_only_vsequences v4;
+  
+  function new(string name, uvm_component parent);
+    super.new(name, parent);
+  endfunction
+  
+  task run_phase(uvm_phase phase);
+  
+    vs = dummy_vsequence               :: type_id :: create("vs");
+    vw = WD_WA_R_vsequence             :: type_id :: create("vw");
+    v1 = WD_WA_in_read_only_vsequences :: type_id :: create("v1");
+    v2 = WA_WD_in_read_only_vsequences :: type_id :: create("v2");
+    v3 = WDA_in_read_only_vsequences   :: type_id :: create("v3");
+    v4 = R_in_write_only_vsequences    :: type_id :: create("v4");
+
+    phase.raise_objection(this);
+      
+      vs.start(env.vseqr);
+      vw.start(env.vseqr);
+      v1.start(env.vseqr);
+      v2.start(env.vseqr);
+      v3.start(env.vseqr);
+      v4.start(env.vseqr);
+      #1000;
+      
+    phase.drop_objection(this);
+    
+  endtask
+    
+endclass
+
+class WA_WD_R_drive_without_waiting_for_ready_test extends base_test;
+  `uvm_component_utils(WA_WD_R_drive_without_waiting_for_ready_test)
+  
+  dummy_vsequence vs;
+  write_only_vsequence vw;
+  WA_WD_R_drive_without_waiting_for_ready_vsequences v1;
+  WA_WD_R_drive_without_waiting_for_ready_parallel_vsequences v2;
+  
+  function new(string name, uvm_component parent);
+    super.new(name, parent);
+  endfunction
+  
+  task run_phase(uvm_phase phase);
+  
+    vs = dummy_vsequence                                             :: type_id :: create("vs");
+    vw = write_only_vsequence                                        :: type_id :: create("vw");
+    v1 = WA_WD_R_drive_without_waiting_for_ready_vsequences          :: type_id :: create("v1");
+    v2 = WA_WD_R_drive_without_waiting_for_ready_parallel_vsequences :: type_id :: create("v2");
+
+    phase.raise_objection(this);
+      
+      vs.start(env.vseqr);
+      vw.start(env.vseqr);
+      v1.start(env.vseqr);
+      #1000;
+      
+    phase.drop_objection(this);
+    
   endtask
 endclass
 
-class sanity_test extends base_test;
-  `uvm_component_utils(sanity_test)
+class WA_WD_R_drive_bready_and_rready_after_4_clk_cycle_test extends base_test;
+  `uvm_component_utils(WA_WD_R_drive_bready_and_rready_after_4_clk_cycle_test)
   
-  sanity_sequence_arith s1;
-  sanity_sequence_logic s2;
+  dummy_vsequence vs;
+  write_only_vsequence vw;
+  WA_WD_R_drive_bready_and_rready_after_4_clk_cycle_vsequences v1;
   
-  function new(string name = "sanity_test", uvm_component parent = null);
+  function new(string name, uvm_component parent);
     super.new(name, parent);
   endfunction
   
-  function void build_phase(uvm_phase phase);
-    super.build_phase(phase);
-  endfunction
-  
   task run_phase(uvm_phase phase);
-    super.run_phase(phase);
-    
-    s1 = sanity_sequence_arith :: type_id :: create("s1");
-    s2 = sanity_sequence_logic :: type_id :: create("s2");
-    
+  
+    vs = dummy_vsequence                                              :: type_id :: create("vs");
+    vw = write_only_vsequence                                         :: type_id :: create("vw");
+    v1 = WA_WD_R_drive_bready_and_rready_after_4_clk_cycle_vsequences :: type_id :: create("v1");
+
     phase.raise_objection(this);
-    
-    s1.start(en.agi.seqr);
-    s2.start(en.agi.seqr);
-    
-    `uvm_info(get_type_name(),"Dropping objection", UVM_NONE)
-    
+      
+      vs.start(env.vseqr);
+      vw.start(env.vseqr);
+      v1.start(env.vseqr);
+      #1000;
+      
     phase.drop_objection(this);
+    
   endtask
 endclass
 
-class corner_test extends base_test;
-  `uvm_component_utils(corner_test)
+class WA_WD_R_drive_bready_and_rready_always_high_test extends base_test;
+  `uvm_component_utils(WA_WD_R_drive_bready_and_rready_always_high_test)
   
-  corner_sequence s1;
+  dummy_vsequence vs;
+  write_only_vsequence vw;
+  WA_WD_R_drive_bready_and_rready_always_high_vsequences v1;
   
-  function new(string name = "corner_test", uvm_component parent = null);
+  function new(string name, uvm_component parent);
     super.new(name, parent);
   endfunction
   
-  function void build_phase(uvm_phase phase);
-    super.build_phase(phase);
-  endfunction
-  
   task run_phase(uvm_phase phase);
-    super.run_phase(phase);
-    
-    s1 = corner_sequence :: type_id :: create("s1");
-    
+  
+    vs = dummy_vsequence                                        :: type_id :: create("vs");
+    vw = write_only_vsequence                                   :: type_id :: create("vw");
+    v1 = WA_WD_R_drive_bready_and_rready_always_high_vsequences :: type_id :: create("v1");
+
     phase.raise_objection(this);
-    
-    s1.start(en.agi.seqr);
-    
-    `uvm_info(get_type_name(),"Dropping objection", UVM_NONE)
-    
+      
+      vs.start(env.vseqr);
+      vw.start(env.vseqr);
+      v1.start(env.vseqr);
+      #1000;
+      
     phase.drop_objection(this);
+    
   endtask
 endclass

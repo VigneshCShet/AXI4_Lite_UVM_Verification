@@ -1,0 +1,20 @@
+package axi_pkg;
+  import uvm_pkg::*;
+  `include "uvm_macros.svh"
+  `include "Testbench/defines.svh"
+  `include "Testbench/axi_config.sv"
+  `include "Testbench/seq_item.sv"
+  `include "Testbench/sequences.sv"
+  `include "Testbench/read_sequences.sv"
+  `include "Testbench/sequencer.sv"
+  `include "Testbench/vsequences.sv"
+  `include "Testbench/driver.sv"
+  `include "Testbench/inp_monitor.sv"
+  `include "Testbench/out_monitor.sv"
+  `include "Testbench/inp_agent.sv"
+  `include "Testbench/out_agent.sv"
+  `include "Testbench/scoreboard.sv"
+  `include "Testbench/coverage_collector.sv"
+  `include "Testbench/environment.sv"
+  `include "Testbench/test.sv"
+endpackage

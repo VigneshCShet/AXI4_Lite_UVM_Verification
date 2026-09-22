@@ -1,3 +1,4 @@
-`define dw 8
-`define cw 4
-`define trn 100
+`define aw 32
+`define dw 32
+`define depth 16
+`define txns 150

@@ -1,6 +1,5 @@
 class trans extends uvm_sequence_item;
   
-  
   //write address channel
   rand bit [`aw - 1 : 0] awaddr;
   rand bit [2:0] awprot;
@@ -31,13 +30,14 @@ class trans extends uvm_sequence_item;
   logic rvalid; //output
   bit rready;
   
+  rand bit [1:0] dr;
+  
   `uvm_object_utils_begin(trans)
     `uvm_field_int(awaddr, UVM_ALL_ON)
     `uvm_field_int(awprot, UVM_ALL_ON)
     `uvm_field_int(awvalid, UVM_ALL_ON)
     `uvm_field_int(wdata, UVM_ALL_ON)
     `uvm_field_int(awready, UVM_ALL_ON)
-    `uvm_field_int(wdata, UVM_ALL_ON)
     `uvm_field_int(wstrb, UVM_ALL_ON)
     `uvm_field_int(wvalid, UVM_ALL_ON)
     `uvm_field_int(wready, UVM_ALL_ON)
@@ -45,9 +45,6 @@ class trans extends uvm_sequence_item;
     `uvm_field_int(bvalid, UVM_ALL_ON)
     `uvm_field_int(bready, UVM_ALL_ON)
     `uvm_field_int(araddr, UVM_ALL_ON)
-    `uvm_field_int(arprot, UVM_ALL_ON)
-    `uvm_field_int(arvalid, UVM_ALL_ON)
-    `uvm_field_int(arready, UVM_ALL_ON)
     `uvm_field_int(arprot, UVM_ALL_ON)
     `uvm_field_int(arvalid, UVM_ALL_ON)
     `uvm_field_int(arready, UVM_ALL_ON)
@@ -85,6 +82,22 @@ class trans extends uvm_sequence_item;
   
   constraint rule6{
     soft araddr inside {[0:63]};
+    soft awaddr inside {[0:63]};
+  }
+  
+  constraint rule7{
+    soft awprot == 0;
+    soft arprot == 0;
+  }
+  
+  constraint rule8{
+    soft dr == 0;
+  }
+  
+  constraint rule9{
+    soft !(araddr inside {[52:56]});
+    soft !(awaddr inside {[40:48]});
   }
   
 endclass
+
